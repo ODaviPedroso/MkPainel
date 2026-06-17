@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MKPainel — Painel + MK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --brand-500:#2e5bff; --brand-600:#1f47e6; --brand-700:#1a3bbf; --ink-1:#0f172a; --ink-3:#667085; --border:#e4e7ec; --bg:#f7f8fa; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family:"Inter",system-ui,sans-serif; background:var(--bg); color:var(--ink-1); -webkit-font-smoothing:antialiased; padding:48px 32px 80px; }
+    .page-head { max-width: 1080px; margin: 0 auto 40px; }
+    .page-eyebrow { font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--brand-600); margin-bottom:10px; }
+    .page-head h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; margin:0 0 8px; }
+    .page-head p { font-size:15px; color:var(--ink-3); margin:0; max-width:640px; line-height:1.55; }
+    .grid { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; }
+    .card.featured { border-color: var(--brand-500); box-shadow: 0 0 0 3px #eff4ff; }
+    .card-head { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+    .card-name { font-size:15px; font-weight:700; letter-spacing:-0.01em; }
+    .card-num { font-size:11px; font-weight:700; color:var(--brand-600); background:#eff4ff; padding:3px 9px; border-radius:99px; white-space:nowrap; }
+    .card-desc { font-size:12.5px; color:var(--ink-3); padding:13px 20px 0; line-height:1.5; }
+    .stage { padding:30px 20px; display:flex; align-items:center; justify-content:center; }
+    .lockup { display:flex; flex-direction:column; align-items:center; gap:16px; }
+    .wordmark { font-size:20px; font-weight:800; letter-spacing:-0.02em; }
+    .wordmark .light { font-weight:500; color:var(--ink-3); }
+    .contexts { display:flex; border-top:1px solid var(--border); }
+    .ctx { flex:1; padding:20px; display:flex; flex-direction:column; align-items:center; gap:12px; border-right:1px solid var(--border); }
+    .ctx:last-child { border-right:none; }
+    .ctx.dark { background:#0f172a; }
+    .ctx-label { font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); }
+    .ctx.dark .ctx-label { color:#64748b; }
+    .sizes { display:flex; align-items:flex-end; gap:14px; }
+    .mini-side { width:100%; background:#fff; border:1px solid var(--border); border-radius:10px; padding:11px; display:flex; flex-direction:column; gap:9px; }
+    .mini-side-logo { display:flex; align-items:center; gap:8px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+    .mini-side-logo .wm { font-size:13px; font-weight:700; letter-spacing:-0.01em; }
+    .mini-row { height:6px; border-radius:4px; background:#eef1f5; }
+    .mini-row.w1 { width:70%; } .mini-row.w2 { width:50%; }
+    @media (max-width: 860px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-head">
+    <div class="page-eyebrow">Identidade · MKPainel</div>
+    <h1>Painel com "MK" em traço de gráfico</h1>
+    <p>O "M" segue como linha de chart (picos), e o "K" entra como monograma ao lado — as duas iniciais dentro do painel. Três tratamentos; veja sobretudo o tamanho pequeno, porque na sidebar as duas letras precisam respirar.</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- A — MK limpo -->
+    <div class="card featured">
+      <div class="card-head">
+        <div class="card-name">Painel-MK · limpa</div>
+        <div class="card-num">A</div>
+      </div>
+      <div class="card-desc">M como linha de gráfico, K como monograma. Painel com a barrinha de janela no topo.</div>
+      <div class="stage">
+        <div class="lockup">
+          <svg width="76" height="76" viewBox="0 0 48 48" fill="none">
+            <defs><linearGradient id="a1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e5bff"/><stop offset="1" stop-color="#1a3bbf"/></linearGradient></defs>
+            <rect x="5" y="8" width="38" height="32" rx="8" fill="url(#a1)"/>
+            <rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/>
+            <circle cx="10.5" cy="12" r="1.4" fill="#fff" fill-opacity="0.7"/>
+            <circle cx="15" cy="12" r="1.4" fill="#fff" fill-opacity="0.45"/>
+            <g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="11,34 11,20 17,27 23,20 23,34"/>
+              <path d="M29 20 L29 34"/>
+              <path d="M37 20 L29 27 L37 34"/>
+            </g>
+          </svg>
+          <div class="wordmark">MK<span class="light">Painel</span></div>
+        </div>
+      </div>
+      <div class="contexts">
+        <div class="ctx">
+          <div class="ctx-label">Sidebar</div>
+          <div class="mini-side">
+            <div class="mini-side-logo">
+              <svg width="22" height="22" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#a1)"/><rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/><g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M37 20 L29 27 L37 34"/></g></svg>
+              <span class="wm">MKPainel</span>
+            </div>
+            <div class="mini-row w1"></div><div class="mini-row w2"></div>
+          </div>
+        </div>
+        <div class="ctx dark">
+          <div class="ctx-label">Tamanhos</div>
+          <div class="sizes">
+            <svg width="38" height="38" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#a1)"/><rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/><g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M37 20 L29 27 L37 34"/></g></svg>
+            <svg width="26" height="26" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#a1)"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M37 20 L29 27 L37 34"/></g></svg>
+            <svg width="17" height="17" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#a1)"/><g fill="none" stroke="#fff" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M37 20 L29 27 L37 34"/></g></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B — K vira seta de crescimento -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">Painel-MK · crescimento</div>
+        <div class="card-num">B</div>
+      </div>
+      <div class="card-desc">A diagonal superior do "K" vira uma seta apontando pra cima, com ponto de dado — o "MK" carrega a ideia de crescimento.</div>
+      <div class="stage">
+        <div class="lockup">
+          <svg width="76" height="76" viewBox="0 0 48 48" fill="none">
+            <defs><linearGradient id="b1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e5bff"/><stop offset="1" stop-color="#1a3bbf"/></linearGradient></defs>
+            <rect x="5" y="8" width="38" height="32" rx="8" fill="url(#b1)"/>
+            <rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/>
+            <circle cx="10.5" cy="12" r="1.4" fill="#fff" fill-opacity="0.7"/>
+            <circle cx="15" cy="12" r="1.4" fill="#fff" fill-opacity="0.45"/>
+            <g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="11,34 11,20 17,27 23,20 23,34"/>
+              <path d="M29 20 L29 34"/>
+              <path d="M29 27 L38 19"/>
+              <polyline points="33.5,19 38,19 38,23.5"/>
+              <path d="M29 27 L36 34"/>
+            </g>
+          </svg>
+          <div class="wordmark">MK<span class="light">Painel</span></div>
+        </div>
+      </div>
+      <div class="contexts">
+        <div class="ctx">
+          <div class="ctx-label">Sidebar</div>
+          <div class="mini-side">
+            <div class="mini-side-logo">
+              <svg width="22" height="22" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#b1)"/><rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/><g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M29 27 L38 19"/><polyline points="33.5,19 38,19 38,23.5"/><path d="M29 27 L36 34"/></g></svg>
+              <span class="wm">MKPainel</span>
+            </div>
+            <div class="mini-row w1"></div><div class="mini-row w2"></div>
+          </div>
+        </div>
+        <div class="ctx dark">
+          <div class="ctx-label">Tamanhos</div>
+          <div class="sizes">
+            <svg width="38" height="38" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#b1)"/><rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/><g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M29 27 L38 19"/><polyline points="33.5,19 38,19 38,23.5"/><path d="M29 27 L36 34"/></g></svg>
+            <svg width="26" height="26" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#b1)"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M29 27 L38 19"/><polyline points="33.5,19 38,19 38,23.5"/><path d="M29 27 L36 34"/></g></svg>
+            <svg width="17" height="17" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#b1)"/><g fill="none" stroke="#fff" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,34 11,20 17,27 23,20 23,34"/><path d="M29 20 L29 34"/><path d="M29 27 L38 19"/><path d="M29 27 L36 34"/></g></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C — MK sobre eixo, sem chrome -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">Painel-MK · eixo</div>
+        <div class="card-num">C</div>
+      </div>
+      <div class="card-desc">Sem barrinha de topo: as duas letras assentam numa linha de base (eixo), traço mais grosso. Mais sólida e legível no mini.</div>
+      <div class="stage">
+        <div class="lockup">
+          <svg width="76" height="76" viewBox="0 0 48 48" fill="none">
+            <defs><linearGradient id="c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e5bff"/><stop offset="1" stop-color="#1a3bbf"/></linearGradient></defs>
+            <rect x="5" y="8" width="38" height="32" rx="8" fill="url(#c1)"/>
+            <g fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="11,33 11,17 17,25 23,17 23,33"/>
+              <path d="M29 17 L29 33"/>
+              <path d="M37 17 L29 25 L37 33"/>
+            </g>
+            <line x1="10" y1="34.5" x2="38" y2="34.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.4"/>
+          </svg>
+          <div class="wordmark">MK<span class="light">Painel</span></div>
+        </div>
+      </div>
+      <div class="contexts">
+        <div class="ctx">
+          <div class="ctx-label">Sidebar</div>
+          <div class="mini-side">
+            <div class="mini-side-logo">
+              <svg width="22" height="22" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#c1)"/><g fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,33 11,17 17,25 23,17 23,33"/><path d="M29 17 L29 33"/><path d="M37 17 L29 25 L37 33"/></g><line x1="10" y1="34.5" x2="38" y2="34.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.4"/></svg>
+              <span class="wm">MKPainel</span>
+            </div>
+            <div class="mini-row w1"></div><div class="mini-row w2"></div>
+          </div>
+        </div>
+        <div class="ctx dark">
+          <div class="ctx-label">Tamanhos</div>
+          <div class="sizes">
+            <svg width="38" height="38" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#c1)"/><g fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,33 11,17 17,25 23,17 23,33"/><path d="M29 17 L29 33"/><path d="M37 17 L29 25 L37 33"/></g><line x1="10" y1="34.5" x2="38" y2="34.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.4"/></svg>
+            <svg width="26" height="26" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#c1)"/><g fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,33 11,17 17,25 23,17 23,33"/><path d="M29 17 L29 33"/><path d="M37 17 L29 25 L37 33"/></g></svg>
+            <svg width="17" height="17" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="32" rx="8" fill="url(#c1)"/><g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,33 11,17 17,25 23,17 23,33"/><path d="M29 17 L29 33"/><path d="M37 17 L29 25 L37 33"/></g></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

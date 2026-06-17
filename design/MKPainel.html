@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MKPainel — SaaS para Agências de Tráfego Pago</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="data.jsx"></script>
+  <script type="text/babel" src="empty-states.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="charts.jsx"></script>
+  <script type="text/babel" src="login.jsx"></script>
+  <script type="text/babel" src="onboarding.jsx"></script>
+  <script type="text/babel" src="dashboard.jsx"></script>
+  <script type="text/babel" src="account-detail.jsx"></script>
+  <script type="text/babel" src="campaign-detail.jsx"></script>
+  <script type="text/babel" src="alerts-page.jsx"></script>
+  <script type="text/babel" src="comparison.jsx"></script>
+  <script type="text/babel" src="reports.jsx"></script>
+  <script type="text/babel" src="whatsapp.jsx"></script>
+  <script type="text/babel" src="client-view.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "variant": "default",
+      "live": true,
+      "showAI": true,
+      "compactSidebar": false,
+      "dataState": "populated"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const { LoginScreen, OnboardingScreen, Dashboard, AccountDetail, CampaignDetail, AlertsScreen, ComparisonScreen, ReportsScreen, WhatsAppScreen, ClientView } = window;
+      const [screen, setScreen] = useState("login"); // login | onboarding | dashboard | account | campaign | alerts | compare | reports | whatsapp | client
+      const [email, setEmail] = useState("");
+      const [selectedClient, setSelectedClient] = useState("Loja Bella Moda");
+      const [campaignContext, setCampaignContext] = useState({ client: "Loja Bella Moda", platform: "meta", name: null });
+      const [tweaks, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+      const [tweaksOpen, setTweaksOpen] = useState(false);
+
+      // Tweaks host protocol
+      useEffect(() => {
+        const handler = (e) => {
+          if (e.data?.type === "__activate_edit_mode") setTweaksOpen(true);
+          if (e.data?.type === "__deactivate_edit_mode") setTweaksOpen(false);
+        };
+        window.addEventListener("message", handler);
+        window.parent.postMessage({ type: "__edit_mode_available" }, "*");
+        return () => window.removeEventListener("message", handler);
+      }, []);
+
+      const handleLogin = (mail) => {
+        setEmail(mail);
+        setScreen("onboarding");
+      };
+
+      // Global nav for sidebars on any screen
+      window.__appNav = (id) => {
+        if (id === "dashboard" || id === "accounts") setScreen("dashboard");
+        else if (id === "alerts") setScreen("alerts");
+        else if (id === "compare") setScreen("compare");
+        else if (id === "reports") setScreen("reports");
+        else if (id === "whatsapp") setScreen("whatsapp");
+      };
+
+      const handleNavigate = (target, payload, extra) => {
+        if (target === "account") {
+          setSelectedClient(payload || "Loja Bella Moda");
+          setScreen("account");
+        } else if (target === "campaign") {
+          setCampaignContext({ client: payload, platform: extra?.platform || "meta", name: extra?.name || null });
+          setScreen("campaign");
+        } else if (target === "client") {
+          setSelectedClient(payload || selectedClient);
+          setScreen("client");
+        } else if (target === "alerts") {
+          setScreen("alerts");
+        } else if (target === "accounts") {
+          setScreen("dashboard");
+        } else if (target === "compare") {
+          setScreen("compare");
+        } else if (target === "reports") {
+          setScreen("reports");
+        } else if (target === "whatsapp") {
+          setScreen("whatsapp");
+        }
+      };
+
+      return (
+        <>
+          {screen === "login" && <LoginScreen onLogin={handleLogin}/>}
+          {screen === "onboarding" && <OnboardingScreen email={email} onDone={() => setScreen("dashboard")}/>}
+          {screen === "dashboard" && <Dashboard onLogout={() => setScreen("login")} tweaks={tweaks} onNavigate={handleNavigate}/>}
+          {screen === "account" && <AccountDetail clientName={selectedClient} onBack={() => setScreen("dashboard")} tweaks={tweaks}
+            onCampaign={(client, platform, name) => handleNavigate("campaign", client, { platform, name })}
+            onClientView={(client) => handleNavigate("client", client)}
+          />}
+          {screen === "campaign" && <CampaignDetail clientName={campaignContext.client} platform={campaignContext.platform} campaignName={campaignContext.name} onBack={() => setScreen("account")} tweaks={tweaks}/>}
+          {screen === "alerts" && <AlertsScreen onBack={() => setScreen("dashboard")} tweaks={tweaks}/>}
+          {screen === "compare" && <ComparisonScreen onBack={() => setScreen("dashboard")} tweaks={tweaks}/>}
+          {screen === "reports" && <ReportsScreen onBack={() => setScreen("dashboard")} tweaks={tweaks}/>}
+          {screen === "whatsapp" && <WhatsAppScreen onBack={() => setScreen("dashboard")} tweaks={tweaks}/>}
+          {screen === "client" && <ClientView clientName={selectedClient} onBack={() => setScreen("account")} tweaks={tweaks}/>}
+
+          {/* Persistent screen switcher (visible always for prototype navigation) */}
+          <div className="proto-switcher" style={{
+            position: "fixed", bottom: 16, left: "50%", transform: "translateX(-50%)",
+            background: "rgba(15,23,42,0.94)", backdropFilter: "blur(10px)",
+            color: "#fff", padding: "6px", borderRadius: 999, display: "flex", gap: 2,
+            fontSize: 12, fontWeight: 600, zIndex: 90,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.18)"
+          }}>
+            {[
+              { id: "login", label: "1 · Login" },
+              { id: "onboarding", label: "2 · Onboarding" },
+              { id: "dashboard", label: "3 · Dashboard" },
+              { id: "compare", label: "4 · Comparativo" },
+              { id: "reports", label: "5 · Relatórios" },
+              { id: "whatsapp", label: "6 · WhatsApp" },
+              { id: "account", label: "7 · Conta" },
+              { id: "alerts", label: "8 · Alertas" },
+              { id: "campaign", label: "9 · Campanha" },
+              { id: "client", label: "10 · Cliente" },
+            ].map(s => (
+              <button key={s.id} onClick={() => { if (s.id === "onboarding" && !email) setEmail("admin@agenciaorbita.com.br"); setScreen(s.id); }}
+                style={{
+                  padding: "7px 14px", borderRadius: 999,
+                  background: screen === s.id ? "#2e5bff" : "transparent",
+                  color: "#fff", cursor: "pointer", fontWeight: 600, fontSize: 12,
+                }}>{s.label}</button>
+            ))}
+          </div>
+
+          {tweaksOpen && (
+            <window.TweaksPanel title="Tweaks" onClose={() => setTweaksOpen(false)}>
+              <window.TweakSection title="Variação do dashboard">
+                <window.TweakRadio
+                  value={tweaks.variant}
+                  onChange={(v) => setTweak("variant", v)}
+                  options={[
+                    { value: "default", label: "Padrão" },
+                    { value: "dense", label: "Densa" },
+                    { value: "focused", label: "Foco" },
+                  ]}
+                />
+              </window.TweakSection>
+
+              <window.TweakSection title="Tempo real">
+                <window.TweakToggle
+                  label="Atualização automática"
+                  value={tweaks.live}
+                  onChange={(v) => setTweak("live", v)}
+                />
+              </window.TweakSection>
+
+              <window.TweakSection title="Estado dos dados" subtitle="Simule cenários de uso real">
+                <window.TweakRadio
+                  value={tweaks.dataState}
+                  onChange={(v) => setTweak("dataState", v)}
+                  options={[
+                    { value: "populated", label: "Com dados" },
+                    { value: "empty", label: "Vazio" },
+                    { value: "error", label: "Erro" },
+                  ]}
+                />
+              </window.TweakSection>
+
+              <window.TweakSection title="Navegação">
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <button className="btn btn-secondary btn-sm" onClick={() => setScreen("login")}>Ir para Login</button>
+                  <button className="btn btn-secondary btn-sm" onClick={() => { if (!email) setEmail("admin@agenciaorbita.com.br"); setScreen("onboarding"); }}>Ir para Onboarding</button>
+                  <button className="btn btn-secondary btn-sm" onClick={() => setScreen("dashboard")}>Ir para Dashboard</button>
+                </div>
+              </window.TweakSection>
+            </window.TweaksPanel>
+          )}
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

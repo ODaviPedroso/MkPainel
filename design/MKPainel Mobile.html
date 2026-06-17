@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MKPainel — Versão Mobile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(46, 91, 255, 0.18), transparent 55%),
+        radial-gradient(ellipse at 80% 100%, rgba(26, 59, 191, 0.12), transparent 55%),
+        #0a1228;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grid texture */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 32px 64px;
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ── Left: info panel ── */
+    .info {
+      padding-top: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: block;
+      flex-shrink: 0;
+      filter: drop-shadow(0 4px 12px rgba(46, 91, 255, 0.4));
+    }
+    .brand-name {
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: -2px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #2e5bff;
+      margin-bottom: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: #2e5bff;
+    }
+    h1 {
+      font-size: 40px;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: #fff;
+      max-width: 540px;
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #60a5fa, #2e5bff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lede {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #94a3b8;
+      max-width: 480px;
+      margin: 0 0 32px;
+    }
+
+    /* Quick nav for the iframe */
+    .quick-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(20px);
+    }
+    .quick-nav-title {
+      grid-column: 1 / -1;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin: 0 4px 4px;
+    }
+    .quick-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .quick-btn:hover {
+      background: rgba(46, 91, 255, 0.12);
+      border-color: rgba(46, 91, 255, 0.4);
+      color: #fff;
+    }
+    .quick-btn.active {
+      background: linear-gradient(135deg, #2e5bff, #1a3bbf);
+      border-color: #2e5bff;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(46, 91, 255, 0.3);
+    }
+    .quick-btn-num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      opacity: 0.6;
+      font-weight: 700;
+    }
+    .quick-btn.active .quick-btn-num { opacity: 0.9; }
+
+    /* Feature list */
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 480px;
+    }
+    .feat {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .feat-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(46, 91, 255, 0.12);
+      border: 1px solid rgba(46, 91, 255, 0.3);
+      display: grid;
+      place-items: center;
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+    .feat-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 2px;
+    }
+    .feat-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .tip {
+      margin-top: 28px;
+      padding: 14px 16px;
+      background: rgba(46, 91, 255, 0.08);
+      border: 1px dashed rgba(46, 91, 255, 0.3);
+      border-radius: 10px;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.55;
+      max-width: 480px;
+    }
+    .tip strong { color: #fff; font-weight: 600; }
+    .tip code {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      padding: 1px 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      color: #60a5fa;
+    }
+
+    /* ── Right: iPhone frame ── */
+    .phone-stage {
+      position: sticky;
+      top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .phone-shell {
+      position: relative;
+      width: 390px;
+      height: 814px;
+      background: #0a0a0a;
+      border-radius: 56px;
+      padding: 14px;
+      box-shadow:
+        0 0 0 2px #1a1a1a,
+        0 0 0 4px #2a2a2a,
+        0 30px 60px -10px rgba(0,0,0,0.6),
+        0 60px 120px -30px rgba(46, 91, 255, 0.25);
+    }
+    /* Side buttons */
+    .phone-shell::before {
+      content: "";
+      position: absolute;
+      left: -3px;
+      top: 180px;
+      width: 3px;
+      height: 80px;
+      background: linear-gradient(90deg, #2a2a2a, #1a1a1a);
+      border-radius: 2px 0 0 2px;
+    }
+    .phone-shell::after {
+      content: "";
+      position: absolute;
+      right: -3px;
+      top: 160px;
+      width: 3px;
+      height: 120px;
+      background: linear-gradient(270deg, #2a2a2a, #1a1a1a);
+      border-radius: 0 2px 2px 0;
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #f7f8fa;
+      border-radius: 42px;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Dynamic island */
+    .phone-island {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 32px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    /* The app iframe */
+    .phone-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .phone-caption {
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      max-width: 340px;
+      line-height: 1.5;
+    }
+    .phone-caption strong { color: #cbd5e1; font-weight: 600; }
+
+    .device-pills {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .device-pill {
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .device-pill:hover { background: rgba(255,255,255,0.1); }
+    .device-pill.active {
+      background: linear-gradient(135deg, #2e5bff, #1a3bbf);
+      border-color: #2e5bff;
+      color: #fff;
+    }
+
+    /* ── Responsive — when this page itself is on a small screen ── */
+    @media (max-width: 980px) {
+      .stage {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 24px 20px 48px;
+      }
+      h1 { font-size: 30px; }
+      .phone-stage { position: static; }
+      .info { padding-top: 0; }
+      .phone-shell {
+        transform: scale(0.88);
+        transform-origin: top center;
+        margin-bottom: -80px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 24px; }
+      .lede { font-size: 14px; }
+      .phone-shell {
+        transform: scale(0.78);
+        margin-bottom: -160px;
+      }
+      .quick-nav { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <!-- Left: info & navigation -->
+    <div class="info">
+      <div class="brand">
+        <svg class="brand-mark" width="36" height="36" viewBox="0 0 48 48" fill="none">
+          <defs><linearGradient id="brandlogo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e5bff"/><stop offset="1" stop-color="#1a3bbf"/></linearGradient></defs>
+          <rect x="5" y="8" width="38" height="32" rx="8" fill="url(#brandlogo)"/>
+          <rect x="5" y="8" width="38" height="8" rx="8" fill="#fff" fill-opacity="0.13"/>
+          <circle cx="10.5" cy="12" r="1.4" fill="#fff" fill-opacity="0.7"/>
+          <circle cx="15" cy="12" r="1.4" fill="#fff" fill-opacity="0.45"/>
+          <g fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="11,34 11,20 17,27 23,20 23,34"/>
+            <path d="M29 20 L29 34"/>
+            <path d="M37 20 L29 27 L37 34"/>
+          </g>
+        </svg>
+        <div>
+          <div class="brand-name">MKPainel</div>
+          <div class="brand-sub">SaaS para agências de tráfego pago</div>
+        </div>
+      </div>
+
+      <div class="eyebrow">Versão mobile</div>
+      <h1>O painel inteiro,<br/><em>no bolso da agência.</em></h1>
+      <p class="lede">
+        A mesma experiência do desktop, adaptada para gestão em movimento. Toque para navegar entre as telas — ou redimensione esta janela e veja o layout reagir em tempo real.
+      </p>
+
+      <!-- Quick nav for the phone iframe -->
+      <div class="quick-nav">
+        <div class="quick-nav-title">Navegação rápida</div>
+        <button class="quick-btn active" data-screen="login"><span class="quick-btn-num">01</span> Login</button>
+        <button class="quick-btn" data-screen="onboarding"><span class="quick-btn-num">02</span> Onboarding</button>
+        <button class="quick-btn" data-screen="dashboard"><span class="quick-btn-num">03</span> Dashboard</button>
+        <button class="quick-btn" data-screen="compare"><span class="quick-btn-num">04</span> Comparativo</button>
+        <button class="quick-btn" data-screen="reports"><span class="quick-btn-num">05</span> Relatórios</button>
+        <button class="quick-btn" data-screen="whatsapp"><span class="quick-btn-num">06</span> WhatsApp</button>
+        <button class="quick-btn" data-screen="account"><span class="quick-btn-num">07</span> Conta</button>
+        <button class="quick-btn" data-screen="alerts"><span class="quick-btn-num">08</span> Alertas</button>
+      </div>
+
+      <div class="features">
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </div>
+          <div>
+            <div class="feat-title">Sidebar vira menu drawer</div>
+            <div class="feat-desc">O hambúrguer canto-superior-esquerdo abre o menu completo deslizando da esquerda, com overlay e fechamento automático ao navegar.</div>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <div>
+            <div class="feat-title">KPIs em grid 2-up</div>
+            <div class="feat-desc">Os 4 KPIs principais quebram em duas linhas de dois para leitura rápida no celular, mantendo sparklines e variações.</div>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+          </div>
+          <div>
+            <div class="feat-title">Gráficos em largura total</div>
+            <div class="feat-desc">Charts e funil ocupam 100% da largura — sem espremimento. Tabelas viram scroll horizontal com primeira coluna fixa.</div>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 3l1.7 4.6L18 9l-4.3 1.4L12 15l-1.7-4.6L6 9l4.3-1.4z"/></svg>
+          </div>
+          <div>
+            <div class="feat-title">IA com aprovação ágil</div>
+            <div class="feat-desc">Sugestões da IA com botões aprovar/recusar em destaque — pensado para o uso típico em deslocamento.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <strong>Responsivo de verdade.</strong> O breakpoint ativa em <code>≤ 768px</code>. Abra <code>MKPainel.html</code> em uma janela estreita ou no DevTools mobile e verá o mesmo layout — o iPhone aqui é só para demonstração visual.
+      </div>
+    </div>
+
+    <!-- Right: phone -->
+    <div class="phone-stage">
+      <div class="phone-shell">
+        <div class="phone-screen">
+          <div class="phone-island"></div>
+          <iframe id="phoneFrame" class="phone-frame" src="MKPainel.html" title="MKPainel mobile preview"></iframe>
+        </div>
+      </div>
+      <div class="phone-caption">
+        iPhone 14 Pro · <strong>390 × 844</strong> · use o seletor de telas ou toque no hambúrguer dentro do app para navegar
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Quick-nav buttons: send postMessage to iframe so it switches screens.
+    // Since the app uses internal React state, we proxy via window.__appNav inside the iframe.
+    const frame = document.getElementById('phoneFrame');
+    const buttons = document.querySelectorAll('.quick-btn');
+
+    function setActive(screen) {
+      buttons.forEach(b => b.classList.toggle('active', b.dataset.screen === screen));
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const screen = btn.dataset.screen;
+        setActive(screen);
+        try {
+          const win = frame.contentWindow;
+          // The app exposes window.__appNav for dashboard, accounts, alerts, compare, reports, whatsapp.
+          // Login/onboarding/account need direct state — we click the bottom proto-switcher button inside the iframe.
+          const doc = frame.contentDocument;
+          if (!doc) return;
+          // Find buttons in the proto-switcher
+          const labels = {
+            login: '1 ·', onboarding: '2 ·', dashboard: '3 ·',
+            compare: '4 ·', reports: '5 ·', whatsapp: '6 ·',
+            account: '7 ·', alerts: '8 ·'
+          };
+          const target = labels[screen];
+          if (!target) return;
+          const allBtns = doc.querySelectorAll('.proto-switcher button');
+          allBtns.forEach(b => {
+            if (b.textContent.trim().startsWith(target)) b.click();
+          });
+        } catch (e) { console.warn('Could not navigate iframe:', e); }
+      });
+    });
+  </script>
+</body>
+</html>
