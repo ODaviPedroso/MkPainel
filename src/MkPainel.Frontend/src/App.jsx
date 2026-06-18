@@ -13,8 +13,28 @@ export default function App() {
   const [selectedClient, setSelectedClient] = useState(null);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
 
-  // Check auth on startup
+  // Check auth on startup and handle OAuth callbacks
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+    if (code) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      setPage('connecting-oauth');
+      
+      const userId = localStorage.getItem('mkpainel_userId') || 'd7fb473a-4efd-4e92-bc91-2a945b0a33c1';
+      
+      api.completeMetaOAuth(code, userId)
+        .then(() => {
+          handleLoginSuccess();
+        })
+        .catch(err => {
+          alert('Erro ao conectar com Meta Ads: ' + err.message);
+          setPage('onboarding');
+        });
+      return;
+    }
+
     const activeUser = api.getUser();
     if (activeUser.id) {
       setUser(activeUser);
@@ -61,6 +81,18 @@ export default function App() {
 
   if (page === 'login') {
     return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
+  }
+
+  if (page === 'connecting-oauth') {
+    return (
+      <div className="onb-page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: 20 }}>
+        <Spinner size={48} />
+        <h2 style={{ color: 'var(--ink-1)' }}>Conectando ao Meta Ads</h2>
+        <p style={{ color: 'var(--ink-4)', textAlign: 'center', maxWidth: 400 }}>
+          Estamos autenticando sua conta e importando suas campanhas reais com histórico de métricas. Aguarde um instante...
+        </p>
+      </div>
+    );
   }
 
   if (page === 'onboarding') {
@@ -124,5 +156,14 @@ export default function App() {
       <h2>Página não encontrada</h2>
       <button className="btn btn-primary" onClick={() => setPage('dashboard')}>Voltar ao início</button>
     </div>
+  );
+}
+
+function Spinner({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" strokeWidth="2.5" strokeLinecap="round">
+      <path d="M21 12a9 9 0 1 1-6.219-8.56" style={{ animation: "spin 0.8s linear infinite", transformOrigin: "center" }}/>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </svg>
   );
 }

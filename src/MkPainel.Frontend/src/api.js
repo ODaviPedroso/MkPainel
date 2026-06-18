@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://localhost:55283';
 
 function getHeaders() {
   const headers = {
@@ -86,6 +86,31 @@ export const api = {
     if (!res.ok) {
       const text = await res.text();
       throw new Error(text || `Erro ao conectar conta ${platform}`);
+    }
+    return await res.json();
+  },
+
+  async getMetaLoginUrl() {
+    const res = await fetch(`${BASE_URL}/api/auth/facebook-login-url`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || 'Erro ao obter URL de login do Meta');
+    }
+    return await res.json();
+  },
+
+  async completeMetaOAuth(code, userId) {
+    const res = await fetch(`${BASE_URL}/api/auth/facebook-callback`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ code, userId }),
+    });
+    if (!res.ok) {
+      const json = await res.json().catch(() => null);
+      throw new Error(json?.message || 'Erro ao finalizar autenticação com o Meta Ads');
     }
     return await res.json();
   },

@@ -30,6 +30,21 @@ export function OnboardingScreen({ email, onDone }) {
     }
   };
 
+  const connectMetaReal = async () => {
+    setMetaStatus("connecting");
+    try {
+      const data = await api.getMetaLoginUrl();
+      if (data && data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("Não foi possível obter a URL de login do Meta.");
+      }
+    } catch (err) {
+      alert(err.message || 'Erro ao obter URL de autenticação');
+      setMetaStatus("idle");
+    }
+  };
+
   const allConnected = googleStatus === "connected" && metaStatus === "connected";
 
   useEffect(() => {
@@ -99,7 +114,12 @@ export function OnboardingScreen({ email, onDone }) {
                 {metaStatus === "connected" && <span style={{ color: "var(--green-700)" }}>✓ Conectado · Contas importadas com sucesso</span>}
               </div>
             </div>
-            {metaStatus === "idle" && <button className="btn btn-secondary btn-sm" onClick={connectMeta}>Conectar</button>}
+            {metaStatus === "idle" && (
+              <div style={{ display: "flex", gap: 8 }}>
+                <button className="btn btn-primary btn-sm" onClick={connectMetaReal}>Conectar (Real)</button>
+                <button className="btn btn-secondary btn-sm" onClick={connectMeta}>Simular</button>
+              </div>
+            )}
             {metaStatus === "connecting" && <Spinner/>}
             {metaStatus === "connected" && <span className="badge badge-green"><Icon.Check/> Ativo</span>}
           </div>
